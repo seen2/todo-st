@@ -1,13 +1,13 @@
-package com.todo.todo;
+package com.todo.todo_st;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TodoApplication {
+public class TodoStApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TodoApplication.class, args);
+		SpringApplication.run(TodoStApplication.class, args);
 	}
 
 }
