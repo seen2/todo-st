@@ -48,7 +48,7 @@ public class TodoRespository {
   @PostConstruct
   @SuppressWarnings("unused")
   private void init() {
-    todos.add(new Todo(1, "New Task", "Some Description"));
+    todos.add(new Todo(1, "New Task", "Some Description" ));
     todos.add(new Todo(2, "New Task 2", "Some Description 2"));
     todos.add(new Todo(3, "New Task 3", "Some Description 3"));
   }

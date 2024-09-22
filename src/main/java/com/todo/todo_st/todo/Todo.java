@@ -1,6 +1,12 @@
 package com.todo.todo_st.todo;
 //   private String title;
+
 //   private String description;
+
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
+import io.micrometer.common.lang.NonNull;
+import jakarta.validation.constraints.NotEmpty;
 
 //     public Todo(String description, int id, String title) {
 //         this.description = description;
@@ -76,9 +82,14 @@ package com.todo.todo_st.todo;
 // }
 
 public record Todo(
-    int id,
-    String title,
-    String description
-) {
 
+        Integer id,
+        @NotEmpty @NonNull String title,
+        @NonNull @NotEmpty String description,
+        @DefaultValue("false") boolean completed) {
+
+    // Overload constructor to provide a default value for 'completed'
+    public Todo(int id, @NonNull @NotEmpty String title, @NonNull @NotEmpty String description) {
+        this(id, title, description, false); // Defaults 'completed' to false
+    }
 }

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.validation.Valid;
+
 
 
 @RestController
@@ -50,15 +52,15 @@ public class TodoController {
 
   @PostMapping("/")
   @ResponseStatus(HttpStatus.CREATED)
-  public String postMethodName(@RequestBody Todo todo) {
+  public String createTodo( @Valid @RequestBody Todo todo) {
       todoRespository.addTodo(todo);
       return "Todo added";
   }
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public Optional<Todo> updateTodo(@PathVariable Integer id, @RequestBody Todo entity) {
-      Optional<Todo> todo = todoRespository.updateTodo(entity, id);      
+  public Optional<Todo> updateTodo(@PathVariable Integer id, @Valid @RequestBody Todo newTodo) {
+      Optional<Todo> todo = todoRespository.updateTodo(newTodo, id);      
       return todo;
   }
 
