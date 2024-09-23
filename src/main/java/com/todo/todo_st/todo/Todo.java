@@ -82,14 +82,15 @@ import jakarta.validation.constraints.NotEmpty;
 // }
 
 public record Todo(
-
         Integer id,
         @NotEmpty @NonNull String title,
         @NonNull @NotEmpty String description,
         @DefaultValue("false") boolean completed) {
 
-    // Overload constructor to provide a default value for 'completed'
-    public Todo(int id, @NonNull @NotEmpty String title, @NonNull @NotEmpty String description) {
-        this(id, title, description, false); // Defaults 'completed' to false
-    }
+           
+
+    // // Overload constructor to provide a default value for 'completed'
+    // public Todo(int id, @NonNull @NotEmpty String title, @NonNull @NotEmpty String description) {
+    //     this(id, title, description, false); // Defaults 'completed' to false
+    // }
 }

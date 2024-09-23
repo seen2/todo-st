@@ -1,12 +1,9 @@
 package com.todo.todo_st;
 
 import org.apache.commons.logging.Log;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
-import com.todo.todo_st.todo.Todo;
 
 @SpringBootApplication
 public class TodoStApplication {
@@ -30,13 +27,15 @@ public class TodoStApplication {
 
 	}
 
-	@Bean
-	CommandLineRunner todo(){
+	// @Bean
+	// CommandLineRunner todo(){
 
-		return args->{
-			Todo todo = new Todo(1, "New Task", "Some Description");
-			log.info(todo);
-		};
-	}
+	// 	return args->{
+	// 		Todo todo = new Todo(1, "New Task", "Some Description");
+	// 		log.info(todo);
+	// 	};
+	// }
 
 }
+
+

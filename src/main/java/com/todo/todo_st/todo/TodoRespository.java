@@ -1,56 +1,67 @@
 package com.todo.todo_st.todo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.util.Assert;
 
-import jakarta.annotation.PostConstruct;
+import ch.qos.logback.classic.Logger;
 
 @Repository
 public class TodoRespository {
 
-  private final List<Todo> todos = new ArrayList<>();
+  private static final Logger logger = (Logger) org.slf4j.LoggerFactory.getLogger(TodoRespository.class);
+
+  private final JdbcClient jdbcClient;
+
+  public TodoRespository(JdbcClient jdbcClient) {
+    this.jdbcClient = jdbcClient;
+  }
+
+  // private final List<Todo> todos = new ArrayList<>();
 
   List<Todo> getAllTodos() {
-    return todos;
+    logger.info("Getting all todos");
+    return jdbcClient.sql("SELECT * FROM todo").query(Todo.class).list();
+    // return this.todos;
   }
 
   void addTodo(Todo todo) {
-    todos.add(todo);
+    var updated=jdbcClient.sql("INSERT INTO todo(title, description) VALUES(?,?)").params(List.of(todo.title(), todo.description())).update();
+    Assert.state(updated==1, "Failed to add");
+    logger.info("Todo added");
   }
 
-  Optional<Todo> getTodoById(int id) {
-    return todos.stream().filter(todo -> todo.id() == id).findFirst();
+  Optional<Todo> getTodoById(Integer id) {
+    logger.info("Getting todo by id");
+    return jdbcClient.sql("SELECT * FROM todo where id=:id").param("id", id)
+        .query(Todo.class).optional();
   }
 
   Optional<Todo> updateTodo(Todo receivedTodo, Integer id) {
-    Optional<Todo> foundTodo = this.getTodoById(id);
-    if (foundTodo.isPresent()) {
-      todos.set(todos.indexOf(foundTodo.get()), receivedTodo);
-      return Optional.of(receivedTodo);
-    } else {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-
-    }
-
+    logger.info("Updating todo");
+    var updated=jdbcClient.sql("UPDATE todo SET title=?,description=?, completed=? WHERE id=?").params(
+      List.of(receivedTodo.title(), receivedTodo.description(), receivedTodo.completed(), id)
+    ).update();
+    Assert.state(updated==1, "Failed to update");
+    return getTodoById(id);
   }
 
-  //delete
+  // delete
   void deleteTodo(int id) {
-    todos.removeIf(todo -> todo.id() == id);
+    logger.info("Deleting todo");
+    jdbcClient.sql("DELETE FROM todo WHERE id=:id").param("id", id).query();
+    logger.info("Todo deleted");
   }
 
-
-  @PostConstruct
-  @SuppressWarnings("unused")
-  private void init() {
-    todos.add(new Todo(1, "New Task", "Some Description" ));
-    todos.add(new Todo(2, "New Task 2", "Some Description 2"));
-    todos.add(new Todo(3, "New Task 3", "Some Description 3"));
-  }
+  // @PostConstruct
+  // @SuppressWarnings("unused")
+  // private void init() {
+  // todos.add(new Todo(1, "New Task", "Some Description" ));
+  // todos.add(new Todo(2, "New Task 2", "Some Description 2"));
+  // todos.add(new Todo(3, "New Task 3", "Some Description 3"));
+  // }
 
 }
