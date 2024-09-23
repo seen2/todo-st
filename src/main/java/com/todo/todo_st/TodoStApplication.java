@@ -1,41 +1,55 @@
 package com.todo.todo_st;
 
-import org.apache.commons.logging.Log;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.support.RestClientAdapter;
+import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
+import com.todo.todo_st.user.User;
+import com.todo.todo_st.user.UserHttpClient;
+import com.todo.todo_st.user.UserRestClient;
+
+import ch.qos.logback.classic.Logger;
 
 @SpringBootApplication
 public class TodoStApplication {
 
-	private final static Log log = org.apache.commons.logging.LogFactory.getLog(TodoStApplication.class);
+	private final static Logger logger = (Logger) org.slf4j.LoggerFactory.getLogger(TodoStApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(TodoStApplication.class, args);
-		var welcomeMessage = new WelcomeMessage();
-
-		System.out.println(">>>>>>>>>>>>>>>>>>>>");
-		log.info("Application Started!! --->" + welcomeMessage.getMessage());
-
-		// try (ConfigurableApplicationContext context =
-		// SpringApplication.run(TodoStApplication.class, args)) {
-
-		// var welcomeMessage = (WelcomeMessage) context.getBean("welcomeMessage");
-		// System.out.println(welcomeMessage);
-
-		// }
 
 	}
 
-	// @Bean
-	// CommandLineRunner todo(){
+	@Bean
+	UserHttpClient userHttpClient() {
+		RestClient client = RestClient.create("https://jsonplaceholder.typicode.com");
+		HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(client)).build();
+		return factory.createClient(UserHttpClient.class);
 
-	// 	return args->{
-	// 		Todo todo = new Todo(1, "New Task", "Some Description");
-	// 		log.info(todo);
-	// 	};
-	// }
+	}
+
+	@Bean
+	CommandLineRunner todo(UserRestClient userRestClient) {
+
+		return args -> {
+			User user = userRestClient.getUserById(1);
+			logger.info(""+user);
+
+		};
+	}
+	@Bean
+	CommandLineRunner httpClient(UserHttpClient userHttpClient) {
+
+		return args -> {
+			User user = userHttpClient.getUserById(1);
+
+			logger.info(""+user);
+
+		};
+	}
 
 }
-
-
