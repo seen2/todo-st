@@ -3,5 +3,7 @@ CREATE TABLE IF NOT EXISTS todo (
     title VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     completed BOOLEAN NOT NULL DEFAULT false,
+    version INTEGER NOT NULL DEFAULT 0,
+    
     PRIMARY KEY (id)
 );

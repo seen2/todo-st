@@ -4,6 +4,8 @@ package com.todo.todo_st.todo;
 //   private String description;
 
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 
 import io.micrometer.common.lang.NonNull;
 import jakarta.validation.constraints.NotEmpty;
@@ -82,10 +84,15 @@ import jakarta.validation.constraints.NotEmpty;
 // }
 
 public record Todo(
+
+        @Id
         Integer id,
         @NotEmpty @NonNull String title,
         @NonNull @NotEmpty String description,
-        @DefaultValue("false") boolean completed) {
+        @DefaultValue("false") boolean completed,
+        @Version Integer version
+        
+        ) {
 
            
 

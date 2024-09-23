@@ -10,13 +10,13 @@ import org.springframework.util.Assert;
 import ch.qos.logback.classic.Logger;
 
 @Repository
-public class TodoRespository {
+public class JDBCTodoRespository {
 
-  private static final Logger logger = (Logger) org.slf4j.LoggerFactory.getLogger(TodoRespository.class);
+  private static final Logger logger = (Logger) org.slf4j.LoggerFactory.getLogger(JDBCTodoRespository.class);
 
   private final JdbcClient jdbcClient;
 
-  public TodoRespository(JdbcClient jdbcClient) {
+  public JDBCTodoRespository(JdbcClient jdbcClient) {
     this.jdbcClient = jdbcClient;
   }
 
